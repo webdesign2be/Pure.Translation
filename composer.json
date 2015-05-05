@@ -1,0 +1,13 @@
+{
+    "name": "pure/translation",
+    "type": "typo3-flow-package",
+    "description": "Neos backend module to edit and update frontend translations",
+    "require": {
+        "typo3/neos": "2.0.x-dev"
+    },
+    "autoload": {
+        "psr-0": {
+            "Pure\\Translation": "Classes"
+        }
+    }
+}

@@ -1,0 +1,53 @@
+{namespace neos=TYPO3\Neos\ViewHelpers}
+{namespace ts=TYPO3\TypoScript\ViewHelpers}
+{namespace typo3cr=TYPO3\TYPO3CR\ViewHelpers}
+<f:layout name="Default" />
+
+<f:section name="Title">Index view of Standard controller</f:section>
+
+<f:section name="Content">
+	<div class="translations neos-table">
+		<f:for each="{translations}" as="languages" key="langKey">
+			<f:if condition="{langKey} == 'en'">
+				<f:then>
+					<f:render section="langBody" arguments="{langKey: langKey, languages: languages}" />
+				</f:then>
+				<f:else>
+					<f:render section="langBodySelection" arguments="{langKey: langKey, languages: languages}" />
+				</f:else>
+			</f:if>
+		</f:for>
+		<div class="clr"></div>
+	</div>
+</f:section>
+
+<f:section name="langBody">
+	<div class="neos-column">
+		<div class="neos-thead">
+			<span>{langKey -> f:format.case(mode: 'upper')}</span>
+		</div>
+		<div class="neos-tbody">
+			<ul>
+				<f:for each="{languages}" as="trans">
+					<li>{trans -> f:format.crop(maxCharacters: 120, append: '...')}</li>
+				</f:for>
+			</ul>
+		</div>
+	</div>
+</f:section>
+
+<f:section name="langBodySelection">
+	<div class="neos-column translation-column hide" id="{langKey -> f:format.case(mode: 'upper')}">
+		<div class="langSelector"></div>
+		<div class="neos-thead hidden">
+			<span>{langKey}</span>
+		</div>
+		<div class="neos-tbody">
+			<ul>
+				<f:for each="{languages}" as="trans">
+					<li>{trans -> f:format.crop(maxCharacters: 120, append: '...')}</li>
+				</f:for>
+			</ul>
+		</div>
+	</div>
+</f:section>

@@ -1,0 +1,126 @@
+.neos-table {
+	width: 100%;
+}
+
+.translations {
+	clear: both;
+}
+
+.translations .neos-column {
+	width: 50%;
+	float: left;
+	line-height: 40px;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+.translations .translation-column {
+	display: none;
+}
+
+/*.translations .translation-column:nth-child(2) {
+	display: block;
+*/}
+
+.translations .translation-column.hide {
+	display: none;
+}
+
+.translations .translation-column.show {
+	display: block;
+}
+
+.translations .neos-column .neos-thead {
+	height: 40px;
+	padding: 0 16px 0 0;
+	line-height: 40px;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	background: #333;
+}
+
+.translations .neos-column .langSelector {
+	height: 40px;
+	line-height: 40px;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	background: #333;
+	cursor: pointer;
+}
+
+.translations .neos-column .neos-thead span {
+	padding: 0 1em;
+}
+
+.translations .neos-column .neos-tbody {
+	border: 1px solid #333;
+}
+
+.translations .neos-column .neos-tbody ul {
+	clear: both;
+}
+
+.translations .neos-column .neos-tbody ul li {
+	padding: 10px 1em;
+	line-height: 30px;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	border-bottom: 1px solid #333;
+}
+
+.langSelector {
+	position: relative;
+}
+
+.langSelector .selectableLang {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	background: #333;
+	position: relative;
+	z-index: 10;
+	border: 1px solid #444;
+}
+
+.langSelector .selectableLang > div {
+	border: 1px solid #444;
+	cursor: pointer;
+	padding: 0 1em;
+}
+
+.langSelector .selectableLang > div:hover {
+	background: #444;
+}
+
+.langSelector .currentLang {
+	padding: 0 1em;
+}
+
+.langSelector .currentLang:after {
+	content: "›";
+	font-size: 26px;
+	font-weight: normal;
+	display: inline-block;
+	position: relative;
+	top: 0;
+	line-height: 40px;
+	-webkit-transform: rotate(90deg);
+	-moz-transform: rotate(90deg);
+	-ms-transform: rotate(90deg);
+	-o-transform: rotate(90deg);
+	transform: rotate(90deg);
+	left: 8px;
+	vertical-align: middle;
+}
+
+.clr {
+	clear: both;
+}
+
+.hidden {
+	display: none;
+}

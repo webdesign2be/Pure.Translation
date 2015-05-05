@@ -1,0 +1,16 @@
+privilegeTargets:
+  'TYPO3\Flow\Security\Authorization\Privilege\Method\MethodPrivilege':
+    'Pure.Translation:Management':
+      matcher: 'method(Pure\Translation\Controller\Management\ManagementController->.*Action())'
+    'Pure.Translation:TranslationManagement':
+      matcher: 'method(Pure\Translation\Controller\Management\TranslationManagementController->.*Action())'
+
+roles:
+  'TYPO3.Neos:Editor':
+    privileges:
+      -
+        privilegeTarget: 'Pure.Translation:Management'
+        permission: GRANT
+      -
+        privilegeTarget: 'Pure.Translation:TranslationManagement'
+        permission: GRANT

@@ -1,0 +1,26 @@
+TYPO3:
+  Neos:
+    modules:
+      translationManagement:
+        label: 'Translation Management'
+        controller: '\TYPO3\Neos\Controller\Module\ManagementController'
+        description: 'Contains a module to manage frontend translations'
+        icon: 'icon-flag'
+        submodules:
+          Translator:
+            label: 'Translator'
+            controller: '\Pure\Translation\Controller\Management\TranslationManagementController'
+            description: 'This module is for managing translations'
+            icon: 'icon-flag-alt'
+            actions:
+              index:
+                label: 'Translations overview'
+                title: 'Shows a list of translated labels'
+Pure:
+  Translator:
+    bodyClasses: 'neos neos-module translation-browser'
+    additionalResources:
+      javaScripts:
+        - resource://Pure.Translator/Public/JavaScript/Translation.js
+      styleSheets:
+        - resource://Pure.Translator/Public/Styles/Translation.css
