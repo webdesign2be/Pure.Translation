@@ -6,48 +6,33 @@
 <f:section name="Title">Index view of Standard controller</f:section>
 
 <f:section name="Content">
-	<div class="translations neos-table">
-		<f:for each="{translations}" as="languages" key="langKey">
-			<f:if condition="{langKey} == 'en'">
-				<f:then>
-					<f:render section="langBody" arguments="{langKey: langKey, languages: languages}" />
-				</f:then>
-				<f:else>
-					<f:render section="langBodySelection" arguments="{langKey: langKey, languages: languages}" />
-				</f:else>
-			</f:if>
-		</f:for>
-		<div class="clr"></div>
-	</div>
-</f:section>
+	<noscript>
+		<div class="no-js" style="background-color: #ff8700; padding: 20px;">
+			You need JavaScript activated to use this module (for now).
+		</div>
+	</noscript>
 
-<f:section name="langBody">
-	<div class="neos-column">
-		<div class="neos-thead">
-			<span>{langKey -> f:format.case(mode: 'upper')}</span>
-		</div>
-		<div class="neos-tbody">
-			<ul>
-				<f:for each="{languages}" as="trans">
-					<li>{trans -> f:format.crop(maxCharacters: 120, append: '...')}</li>
-				</f:for>
-			</ul>
-		</div>
-	</div>
-</f:section>
+	<div class="translations" data-area="Translations" data-locale="{defaultLocale}">
+		<div style="display:none;" data-json="translations">{allTranslationsJSON}</div>
+		<div style="display:none;" data-json="locales">{availableLocalesJSON}</div>
 
-<f:section name="langBodySelection">
-	<div class="neos-column translation-column hide" id="{langKey -> f:format.case(mode: 'upper')}">
-		<div class="langSelector"></div>
-		<div class="neos-thead hidden">
-			<span>{langKey}</span>
-		</div>
-		<div class="neos-tbody">
-			<ul>
-				<f:for each="{languages}" as="trans">
-					<li>{trans -> f:format.crop(maxCharacters: 120, append: '...')}</li>
+		<f:form action="save"></f:form>
+
+		<table class="neos-table" data-enhance="TranslationTable">
+			<thead>
+				<tr>
+					<th>{availableLocales.0 -> f:format.case(mode: 'upper')}</th>
+					<th>{availableLocales.1 -> f:format.case(mode: 'upper')}</th>
+				</tr>
+			</thead>
+			<tbody>
+				<f:for each="{translations}" as="translation">
+					<tr>
+						<td>{translation.0.value}</td>
+						<td>{translation.1.value}</td>
+					</tr>
 				</f:for>
-			</ul>
-		</div>
+			</tbody>
+		</table>
 	</div>
 </f:section>

@@ -1,0 +1,35 @@
+{
+  "name": "Pure.Translation",
+  "version": "0.0.1",
+  "description": "Dynamic Translation Management for TYPO3 Neos Site Packages",
+  "main": "Translation.js",
+  "scripts": {
+    "build": "./node_modules/.bin/browserify -t babelify Resources/Private/JavaScripts/Main.js > Resources/Public/JavaScripts/Main.js",
+    "watch": "./node_modules/.bin/watchify -t babelify Resources/Private/JavaScripts/Main.js -o Resources/Public/JavaScripts/Main.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/grebaldi/Pure.Translation.git"
+  },
+  "author": "",
+  "homepage": "https://github.com/grebaldi/Pure.Translation",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/grebaldi/Pure.Translation/issues"
+  },
+  "browser": {
+    "Templates/TranslationTable" : "./Resources/Private/JavaScripts/Templates/TranslationTable.js",
+    "Templates/MainApplication" : "./Resources/Private/JavaScripts/Templates/MainApplication.js"
+  },
+  "dependencies": {
+    "componentdomparser": "0.1.0",
+    "domjs": "^0.2.3",
+    "dot": "^1.0.3",
+    "fishbone": "^1.0.1"
+  },
+  "devDependencies": {
+    "browserify": "^10.1.0",
+    "watchify": "^3.2.1",
+    "babelify": "^6.0.2"
+  }
+}
