@@ -16,8 +16,13 @@ let Translations = Model({
     this.el = el;
     this.tableViews = {};
     this.form = this.el.getElementsByTagName('form')[0];
-    this.locales = JSON.parse(this.el.querySelector('[data-json="locales"]').innerText);
-    this.translations = JSON.parse(this.el.querySelector('[data-json="translations"]').innerText);
+
+    let localeNode = this.el.querySelector('[data-json="locales"]');
+    this.locales = JSON.parse(localeNode.textContent || localeNode.innerText);
+
+    let translationNode = this.el.querySelector('[data-json="translations"]');
+    this.translations = JSON.parse(translationNode.textContent || translationNode.innerText);
+
     this.defaultTarget = this.el.dataset.locale || this.locales[1];
     this.render(this.locales[0], this.defaultTarget);
   },
