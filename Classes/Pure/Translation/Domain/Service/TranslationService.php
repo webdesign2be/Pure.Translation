@@ -3,6 +3,7 @@
 namespace Pure\Translation\Domain\Service;
 
 use TYPO3\Flow\Annotations as Flow;
+use TYPO3\Neos\Exception as NeosException;
 
 /**
  * A simple service that helps retrieving site package translations
@@ -48,62 +49,77 @@ class TranslationService {
    * @param $packageTypeFilter Specify the type of packages that should be considered
    * @param string $sourceName The source catalog to use
    * @return array
+   * @throws NeosException
    */
   public function retrieveAll($packageTypeFilter = 'typo3-flow-site', $sourceName = 'Main') {
     if (NULL === $this->allTranslations) {
-      $translations = array(
-        'list' => array()
-      );
-      $packages = $this->packageManager->getFilteredPackages('available', NULL, $packageTypeFilter);
+      if ($this->languageDimensionPresets !== NULL) {
+        $translations = array(
+          'list' => array()
+        );
+        $packages = $this->packageManager->getFilteredPackages('available', NULL, $packageTypeFilter);
 
-      $listIterator = 0;
-      foreach ($packages as $packageKey => $package) {
+        $listIterator = 0;
+        foreach ($packages as $packageKey => $package) {
 
-        $localeIndex = 0;
-        foreach ($this->languageDimensionPresets as $presetIdentifier => $preset) {
-          if (!is_array($preset) || !is_array($preset['values'])) {
-            continue;
-          }
+          $localeIndex = 0;
+          foreach ($this->languageDimensionPresets as $presetIdentifier => $preset) {
+            if (!is_array($preset) || !is_array($preset['values'])) {
+              continue;
+            }
 
-          $currentlyUsedLocaleCode = $preset['values'][0];
-          $currentlyUsedLocale = new \TYPO3\Flow\I18n\Locale($currentlyUsedLocaleCode);
-          $xliffData = json_decode(
-            $this->xliffService->getCachedJson($currentlyUsedLocale, $sourceName, $package->getPackageKey()),
-          true);
+            $currentlyUsedLocaleCode = $preset['values'][0];
+            $currentlyUsedLocale = new \TYPO3\Flow\I18n\Locale($currentlyUsedLocaleCode);
 
-          foreach ($xliffData as $vendor) {
-            foreach ($vendor as $product) {
-              foreach ($product as $sourceName => $translationUnit) {
-                foreach ($translationUnit as $identifier => $value) {
-                  $translation = array(
-                    'packageKey' => $packageKey,
-                    'locale' => $currentlyUsedLocaleCode,
-                    'sourceName' => $sourceName,
-                    'identifier' => $identifier,
-                    'value' => $value
-                  );
+            try {
+              $xliffSourceData = $this->xliffService->getCachedJson($currentlyUsedLocale, $sourceName, $package->getPackageKey());
+            } catch(\TYPO3\Flow\I18n\Exception\InvalidXmlFileException $e) {
+              $translations = NULL;
+              continue;
+            }
 
-                  $translations['list'][++$listIterator] = $translation;
+            // \TYPO3\Flow\var_dump();die;
 
-                  // Build Indexes
-                  $translations['Package:Locale:Identifier'][$packageKey][$currentlyUsedLocaleCode][$identifier] =
-                  $translations['Package:Identifier:Locale'][$packageKey][$identifier][$currentlyUsedLocaleCode] =
-                  $translations['Locale:Package:Identifier'][$currentlyUsedLocaleCode][$packageKey][$identifier] =
-                  $translations['Locale:Identifier:Package'][$currentlyUsedLocaleCode][$identifier][$packageKey] =
-                  $translations['Identifier:Package:Locale'][$identifier][$packageKey][$currentlyUsedLocaleCode] =
-                  $translations['Identifier:Locale:Package'][$identifier][$currentlyUsedLocaleCode][$packageKey] =
-                  $translations['Locale:Identifier'][$currentlyUsedLocaleCode][$identifier] =
-                  $translations['Identifier:Locale'][$identifier][$currentlyUsedLocaleCode] =
-                  $translations['Identifier:LocaleNumeric'][$identifier][$localeIndex] =
-                    &$translations['list'][$listIterator];
+            $xliffData = json_decode(
+              $xliffSourceData,
+            true);
+
+            foreach ($xliffData as $vendor) {
+              foreach ($vendor as $product) {
+                foreach ($product as $sourceName => $translationUnit) {
+                  foreach ($translationUnit as $identifier => $value) {
+                    $translation = array(
+                      'packageKey' => $packageKey,
+                      'locale' => $currentlyUsedLocaleCode,
+                      'sourceName' => $sourceName,
+                      'identifier' => $identifier,
+                      'value' => $value
+                    );
+
+                    $translations['list'][++$listIterator] = $translation;
+
+                    // Build Indexes
+                    $translations['Package:Locale:Identifier'][$packageKey][$currentlyUsedLocaleCode][$identifier] =
+                    $translations['Package:Identifier:Locale'][$packageKey][$identifier][$currentlyUsedLocaleCode] =
+                    $translations['Locale:Package:Identifier'][$currentlyUsedLocaleCode][$packageKey][$identifier] =
+                    $translations['Locale:Identifier:Package'][$currentlyUsedLocaleCode][$identifier][$packageKey] =
+                    $translations['Identifier:Package:Locale'][$identifier][$packageKey][$currentlyUsedLocaleCode] =
+                    $translations['Identifier:Locale:Package'][$identifier][$currentlyUsedLocaleCode][$packageKey] =
+                    $translations['Locale:Identifier'][$currentlyUsedLocaleCode][$identifier] =
+                    $translations['Identifier:Locale'][$identifier][$currentlyUsedLocaleCode] =
+                    $translations['Identifier:LocaleNumeric'][$identifier][$localeIndex] =
+                      &$translations['list'][$listIterator];
+                  }
                 }
               }
-            }
-          } // XLIFF Iteration
+            } // XLIFF Iteration
 
-          $localeIndex++;
-        } // Dimension Iteration
-      } // Package Iteration
+            $localeIndex++;
+          } // Dimension Iteration
+        } // Package Iteration
+      } else {
+        $translations = NULL;
+      }
 
       $this->allTranslations = $translations;
     }
@@ -118,7 +134,7 @@ class TranslationService {
    */
   public function retrieveAllGroupedByPackage() {
     $this->retrieveAll();
-    return $this->allTranslations['Package:Locale:Identifier'];
+    return $this->allTranslations !== NULL ? $this->allTranslations['Package:Locale:Identifier'] : NULL;
   }
 
   /**
@@ -128,7 +144,7 @@ class TranslationService {
    */
   public function retrieveAllGroupedByLocale() {
     $this->retrieveAll();
-    return $this->allTranslations['Locale:Package:Identifier'];
+    return $this->allTranslations !== NULL ? $this->allTranslations['Locale:Package:Identifier'] : NULL;
   }
 
   /**
@@ -139,7 +155,7 @@ class TranslationService {
    */
   public function retrieveAllGroupedByLocaleOnly() {
     $this->retrieveAll();
-    return $this->allTranslations['Locale:Identifier'];
+    return $this->allTranslations !== NULL ? $this->allTranslations['Locale:Identifier'] : NULL;
   }
 
   /**
@@ -150,7 +166,7 @@ class TranslationService {
    */
   public function retrieveAllGroupedByIdentifierAndLocale() {
     $this->retrieveAll();
-    return $this->allTranslations['Identifier:Locale'];
+    return $this->allTranslations !== NULL ? $this->allTranslations['Identifier:Locale'] : NULL;
   }
 
   /**
@@ -161,7 +177,7 @@ class TranslationService {
    */
   public function retrieveAllGroupedByIdentifierAndHavingNumericLocale() {
     $this->retrieveAll();
-    return $this->allTranslations['Identifier:LocaleNumeric'];
+    return $this->allTranslations !== NULL ? $this->allTranslations['Identifier:LocaleNumeric'] : NULL;
   }
 
   /**
@@ -219,10 +235,11 @@ class TranslationService {
    */
   public function getAllLocales() {
     $result = array();
-
-    foreach ($this->languageDimensionPresets as $preset) {
-      if (is_array($preset) && is_array($preset['values'])) {
-        $result[] = $preset['values'][0];
+    if ($this->languageDimensionPresets !== NULL) {
+      foreach ($this->languageDimensionPresets as $preset) {
+        if (is_array($preset) && is_array($preset['values'])) {
+          $result[] = $preset['values'][0];
+        }
       }
     }
 

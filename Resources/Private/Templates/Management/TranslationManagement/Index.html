@@ -12,27 +12,38 @@
 		</div>
 	</noscript>
 
-	<div class="translations" data-area="Translations" data-locale="{defaultLocale}">
-		<div style="display:none;" data-json="translations">{allTranslationsJSON -> f:format.raw()}</div>
-		<div style="display:none;" data-json="locales">{availableLocalesJSON -> f:format.raw()}</div>
+	<f:if condition="{errorLocale}">
+		<div class="neos-error">There are no language dimensions defined.</div>
+	</f:if>
 
-		<f:form action="save"></f:form>
+	<f:if condition="{errorTransFiles}">
+		<f:then>
+			<div class="neos-error">There are no language xliff files in your sitepackages.</div>
+		</f:then>
+		<f:else>
+			<div class="translations" data-area="Translations" data-locale="{defaultLocale}">
+				<div style="display:none;" data-json="translations">{allTranslationsJSON -> f:format.raw()}</div>
+				<div style="display:none;" data-json="locales">{availableLocalesJSON -> f:format.raw()}</div>
 
-		<table class="neos-table" data-enhance="TranslationTable">
-			<thead>
-				<tr>
-					<th>{availableLocales.0 -> f:format.case(mode: 'upper')}</th>
-					<th>{availableLocales.1 -> f:format.case(mode: 'upper')}</th>
-				</tr>
-			</thead>
-			<tbody>
-				<f:for each="{translations}" as="translation">
-					<tr>
-						<td>{translation.0.value}</td>
-						<td>{translation.1.value}</td>
-					</tr>
-				</f:for>
-			</tbody>
-		</table>
-	</div>
+				<f:form action="save"></f:form>
+
+				<table class="neos-table" data-enhance="TranslationTable">
+					<thead>
+						<tr>
+							<th>{availableLocales.0 -> f:format.case(mode: 'upper')}</th>
+							<th>{availableLocales.1 -> f:format.case(mode: 'upper')}</th>
+						</tr>
+					</thead>
+					<tbody>
+						<f:for each="{translations}" as="translation">
+							<tr>
+								<td>{translation.0.value}</td>
+								<td>{translation.1.value}</td>
+							</tr>
+						</f:for>
+					</tbody>
+				</table>
+			</div>
+		</f:else>
+	</f:if>
 </f:section>
