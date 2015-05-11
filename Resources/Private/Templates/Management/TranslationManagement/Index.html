@@ -13,8 +13,8 @@
 	</noscript>
 
 	<div class="translations" data-area="Translations" data-locale="{defaultLocale}">
-		<div style="display:none;" data-json="translations">{allTranslationsJSON}</div>
-		<div style="display:none;" data-json="locales">{availableLocalesJSON}</div>
+		<div style="display:none;" data-json="translations">{allTranslationsJSON -> f:format.raw()}</div>
+		<div style="display:none;" data-json="locales">{availableLocalesJSON -> f:format.raw()}</div>
 
 		<f:form action="save"></f:form>
 
