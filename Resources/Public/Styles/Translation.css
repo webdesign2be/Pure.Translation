@@ -124,3 +124,47 @@
 .hidden {
 	display: none;
 }
+
+.neos .translations {
+	padding-bottom: 40px;
+}
+
+.neos .translations .translations-table {
+	width: 100%;
+	table-layout: fixed;
+}
+
+.neos .translations .translations-table td {
+	width: 50%;
+}
+
+.neos .translations .translations-table input[type="text"],
+.neos .translations .translations-table select {
+	width: 100%;
+}
+
+.neos .translations .translations-table td div {
+	width: 100%;
+	height: 100%;
+}
+
+.neos .translations .translations-table td.is-missing {
+	background: #622929;
+}
+
+.neos .translations .translations-table td.editor-dirty {
+	background: #305E2E;
+}
+
+.neos .translations .translations-table td.is-editing,
+.neos .translations .translations-table th.is-target,
+.neos .translations .translations-table th:last-child.is-target,
+.neos .translations .translations-table td:last-child.is-editing {
+	padding-left: 0;
+	padding-right: 0!important;
+}
+
+.neos .translations button {
+	float: right;
+	margin-bottom: 20px;
+}

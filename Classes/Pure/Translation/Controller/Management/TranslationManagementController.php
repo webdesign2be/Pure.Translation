@@ -12,42 +12,20 @@ class TranslationManagementController extends \TYPO3\Neos\Controller\Module\Abst
 
 	/**
 	 * @Flow\Inject
-	 * @var Translator
+	 * @var \Pure\Translation\Domain\Service\TranslationService
 	 */
-	protected $translator;
+	protected $translationService;
 
 	/**
 	 * @Flow\Inject
-	 * @var PackageManagerInterface
+	 * @var \Pure\Translation\Domain\Repository\XLIFFFileRepository
 	 */
-	protected $packageManager;
+	protected $xliffFileRepository;
 
 	/**
 	 * @var array
 	 */
 	protected $settings;
-
-	/**
-	 * @Flow\InjectConfiguration(package="TYPO3.TYPO3CR", path="contentDimensions.language.presets")
-	 * @var array
-	 */
-	protected $languageDimensionPresets;
-
-	/**
-	 * @var string
-	 */
-	protected $currentlyUsedLanguageCode;
-
-	/**
-	 * @var Locale
-	 */
-	protected $currentlyUsedLocale;
-
-	/**
-	 * @Flow\Inject
-	 * @var \TYPO3\Neos\Service\XliffService
-	 */
-	protected $xliffService;
 
 	/**
 	 * @var array
@@ -65,33 +43,37 @@ class TranslationManagementController extends \TYPO3\Neos\Controller\Module\Abst
 	}
 
 	/**
+	 * @param string $locale
 	 * @return void
 	 */
-	public function indexAction() {
-		$translations = array();
-		$packages = $this->packageManager->getFilteredPackages('available', NULL, 'typo3-flow-site');
+	public function indexAction($locale = '') {
+		$allTranslations = $this->translationService->retrieveAllGroupedByIdentifierAndLocale();
+		$translations = $this->translationService->retrieveAllGroupedByIdentifierAndHavingNumericLocale();
+		$locales = $this->translationService->getAllLocales();
 
-		foreach ($packages as $key => $package) {
-			foreach ($this->languageDimensionPresets as $presetIdentifier => $preset) {
-				if (!is_array($preset) || !is_array($preset['values'])) {
-					continue;
-				}
+		$this->view->assign('allTranslationsJSON', json_encode($allTranslations));
+		$this->view->assign('translations', $translations);
+		$this->view->assign('availableLocalesJSON', json_encode($locales));
+		$this->view->assign('availableLocales', $locales);
+		$this->view->assign('defaultLocale', $locale);
+	}
 
-				$this->currentlyUsedLanguageCode = $preset['values'][0];
-				$this->currentlyUsedLocale = new Locale($this->currentlyUsedLanguageCode);
-				$xliffData = json_decode($this->xliffService->getCachedJson($this->currentlyUsedLocale, 'Main', $package->getPackageKey()), true);
-				foreach ($xliffData as $removedVendor) {
-					foreach ($removedVendor as $removedPackage) {
-						foreach ($removedPackage as $trans) {
-							foreach ($trans as $cat) {
-								$translations[$this->currentlyUsedLanguageCode] = $trans;
-							}
-						}
-					}
+	/**
+	 * @param array $commands
+	 * @return void
+	 */
+	public function saveAction($commands) {
+		foreach ($commands as $locale => $translations) {
+			foreach ($translations as $translation) {
+				if($xliffFile = $this->xliffFileRepository->findMainByPackageKeyAndLocale(
+					$translation['packageKey'], $translation['locale'])) {
+						$xliffFile->set($translation['identifier'], $translation['value']);
+						$this->xliffFileRepository->add($xliffFile);
 				}
 			}
 		}
 
-		$this->view->assign('translations', $translations);
+		$this->xliffFileRepository->persistAll();
+		$this->redirect('index', NULL, NULL, array('locale' => $locale));
 	}
 }
