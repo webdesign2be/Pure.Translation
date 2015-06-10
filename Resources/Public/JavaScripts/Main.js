@@ -161,7 +161,7 @@ var Editable = Model({
 
 module.exports = Editable;
 
-},{"./Templates/EditState.js":2,"fishbone":39}],2:[function(require,module,exports){
+},{"./Templates/EditState.js":2,"fishbone":40}],2:[function(require,module,exports){
 'use strict';
 
 var domjs = require('domjs/lib/html5')(document);
@@ -171,7 +171,7 @@ module.exports = function (options) {
   });
 };
 
-},{"domjs/lib/html5":12}],3:[function(require,module,exports){
+},{"domjs/lib/html5":13}],3:[function(require,module,exports){
 'use strict';
 
 var Model = require('fishbone');
@@ -228,7 +228,10 @@ var EditableManager = Model({
    * @return {Object}
    */
   handleDocumentClick: function handleDocumentClick(e) {
-    this.freezeCurrent();
+    if ('input' !== e.target.tagName.toLowerCase()) {
+      this.freezeCurrent();
+    }
+
     return this;
   },
 
@@ -333,7 +336,7 @@ var EditableManager = Model({
 
 module.exports = EditableManager;
 
-},{"fishbone":39}],4:[function(require,module,exports){
+},{"fishbone":40}],4:[function(require,module,exports){
 'use strict';
 
 var Model = require('fishbone');
@@ -509,7 +512,7 @@ var TranslationTable = Model({
 
 module.exports = TranslationTable;
 
-},{"../Editable/Editable":1,"../EditableManager/EditableManager":3,"Templates/TranslationTable":8,"fishbone":39}],5:[function(require,module,exports){
+},{"../Editable/Editable":1,"../EditableManager/EditableManager":3,"Templates/TranslationTable":9,"fishbone":40}],5:[function(require,module,exports){
 'use strict';
 
 var Model = require('fishbone');
@@ -605,7 +608,25 @@ var Translations = Model({
 
 module.exports = Translations;
 
-},{"../Templates/IntermediateForm":6,"./TranslationTable/TranslationTable.js":4,"Templates/MainApplication":7,"fishbone":39}],6:[function(require,module,exports){
+},{"../Templates/IntermediateForm":7,"./TranslationTable/TranslationTable.js":4,"Templates/MainApplication":8,"fishbone":40}],6:[function(require,module,exports){
+/**
+ * Single point of entry bootstrap script
+ */
+'use strict';
+
+var ComponentDomParser = require('componentdomparser');
+var parser = new ComponentDomParser({
+    dataSelector: 'area',
+    componentIndex: {
+        'Translations': require('./Components/Translations.js')
+    }
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+    parser.parse();
+});
+
+},{"./Components/Translations.js":5,"componentdomparser":10}],7:[function(require,module,exports){
 'use strict';
 
 var domjs = require('domjs/lib/html5')(document);
@@ -631,7 +652,7 @@ module.exports = function (data) {
   });
 };
 
-},{"domjs/lib/html5":12}],7:[function(require,module,exports){
+},{"domjs/lib/html5":13}],8:[function(require,module,exports){
 'use strict';
 
 var domjs = require('domjs/lib/html5')(document);
@@ -650,7 +671,7 @@ module.exports = function (options) {
   }).firstChild;
 };
 
-},{"domjs/lib/html5":12}],8:[function(require,module,exports){
+},{"domjs/lib/html5":13}],9:[function(require,module,exports){
 'use strict';
 
 var domjs = require('domjs/lib/html5')(document);
@@ -690,7 +711,7 @@ module.exports = function (options) {
   }).firstChild;
 };
 
-},{"domjs/lib/html5":12}],9:[function(require,module,exports){
+},{"domjs/lib/html5":13}],10:[function(require,module,exports){
 /* ComponentDomParser 0.1.0 | @license MIT */
 
 (function (global, factory) {
@@ -834,7 +855,7 @@ module.exports = function (options) {
     return ComponentDomParser;
 });
 
-},{}],10:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 'use strict';
 
 var forEach       = Array.prototype.forEach
@@ -1002,7 +1023,7 @@ module.exports = {
 	}
 };
 
-},{"./dscope":11,"./is-node":13,"es5-ext/lib/Array/from":14,"es5-ext/lib/Array/prototype/compact":15,"es5-ext/lib/Array/prototype/contains":16,"es5-ext/lib/Array/prototype/flatten":18,"es5-ext/lib/Function/is-function":21,"es5-ext/lib/Function/prototype/partial":23,"es5-ext/lib/Object/for-each":27,"es5-ext/lib/Object/is-list":29,"es5-ext/lib/Object/is-object":30,"es5-ext/lib/Object/is-plain-object":31,"es5-ext/lib/Object/map":33,"es5-ext/lib/reserved":38}],11:[function(require,module,exports){
+},{"./dscope":12,"./is-node":14,"es5-ext/lib/Array/from":15,"es5-ext/lib/Array/prototype/compact":16,"es5-ext/lib/Array/prototype/contains":17,"es5-ext/lib/Array/prototype/flatten":19,"es5-ext/lib/Function/is-function":22,"es5-ext/lib/Function/prototype/partial":24,"es5-ext/lib/Object/for-each":28,"es5-ext/lib/Object/is-list":30,"es5-ext/lib/Object/is-object":31,"es5-ext/lib/Object/is-plain-object":32,"es5-ext/lib/Object/map":34,"es5-ext/lib/reserved":39}],12:[function(require,module,exports){
 // Dynamic scope for given function
 // Pollutes global scope for time of function call
 
@@ -1041,7 +1062,7 @@ module.exports = function (fn, scope) {
 	return result;
 };
 
-},{"es5-ext/lib/global":37,"es5-ext/lib/reserved":38}],12:[function(require,module,exports){
+},{"es5-ext/lib/global":38,"es5-ext/lib/reserved":39}],13:[function(require,module,exports){
 'use strict';
 
 var isFunction = require('es5-ext/lib/Function/is-function')
@@ -1077,7 +1098,7 @@ module.exports = function (document, require) {
 	return Object.create(html5js).init(document, require);
 };
 
-},{"./domjs":10,"es5-ext/lib/Function/is-function":21,"es5-ext/lib/Object/descriptor":26}],13:[function(require,module,exports){
+},{"./domjs":11,"es5-ext/lib/Function/is-function":22,"es5-ext/lib/Object/descriptor":27}],14:[function(require,module,exports){
 // Whether object is DOM node
 
 'use strict';
@@ -1087,7 +1108,7 @@ module.exports = function (x) {
 		(typeof x.nodeName === "string")) || false;
 };
 
-},{}],14:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 'use strict';
 
 var isArray       = Array.isArray
@@ -1104,7 +1125,7 @@ module.exports = function (obj) {
 	}
 };
 
-},{"../Function/is-arguments":20}],15:[function(require,module,exports){
+},{"../Function/is-arguments":21}],16:[function(require,module,exports){
 // Inspired by: http://documentcloud.github.com/underscore/#compact
 
 'use strict';
@@ -1115,7 +1136,7 @@ module.exports = function () {
 	return filter.call(this, Boolean);
 };
 
-},{}],16:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 'use strict';
 
 var indexOf = require('./e-index-of');
@@ -1124,7 +1145,7 @@ module.exports = function (searchElement) {
 	return indexOf.call(this, searchElement, arguments[1]) > -1;
 };
 
-},{"./e-index-of":17}],17:[function(require,module,exports){
+},{"./e-index-of":18}],18:[function(require,module,exports){
 'use strict';
 
 var indexOf = Array.prototype.indexOf
@@ -1146,7 +1167,7 @@ module.exports = function (searchElement) {
 	return -1;
 };
 
-},{"../../Number/is-nan":24,"../../Object/is":32,"../../Object/valid-value":35}],18:[function(require,module,exports){
+},{"../../Number/is-nan":25,"../../Object/is":33,"../../Object/valid-value":36}],19:[function(require,module,exports){
 'use strict';
 
 var isArray   = Array.isArray
@@ -1161,14 +1182,14 @@ module.exports = function flatten() {
 	return r;
 };
 
-},{}],19:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 'use strict';
 
 module.exports = function () {
 	return arguments;
 };
 
-},{}],20:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 'use strict';
 
 var toString = Object.prototype.toString
@@ -1179,7 +1200,7 @@ module.exports = function (x) {
 	return toString.call(x) === id;
 };
 
-},{"./arguments":19}],21:[function(require,module,exports){
+},{"./arguments":20}],22:[function(require,module,exports){
 'use strict';
 
 var toString = Object.prototype.toString
@@ -1190,12 +1211,12 @@ module.exports = function (f) {
 	return (typeof f === "function") && (toString.call(f) === id);
 };
 
-},{"./noop":22}],22:[function(require,module,exports){
+},{"./noop":23}],23:[function(require,module,exports){
 'use strict';
 
 module.exports = function () {};
 
-},{}],23:[function(require,module,exports){
+},{}],24:[function(require,module,exports){
 'use strict';
 
 var apply    = Function.prototype.apply
@@ -1211,14 +1232,14 @@ module.exports = function () {
 	};
 };
 
-},{"../../Array/from":14,"../../Object/valid-callable":34}],24:[function(require,module,exports){
+},{"../../Array/from":15,"../../Object/valid-callable":35}],25:[function(require,module,exports){
 'use strict';
 
 module.exports = function (value) {
 	return (value !== value);
 };
 
-},{}],25:[function(require,module,exports){
+},{}],26:[function(require,module,exports){
 // Internal method, used by iteration functions.
 // Calls a function for each key-value pair found in object
 // Optionally takes compareFn to iterate object in specific order
@@ -1247,7 +1268,7 @@ module.exports = function (method) {
 	};
 };
 
-},{"./is-callable":28,"./valid-callable":34,"./valid-value":35}],26:[function(require,module,exports){
+},{"./is-callable":29,"./valid-callable":35,"./valid-value":36}],27:[function(require,module,exports){
 'use strict';
 
 var isCallable = require('./is-callable')
@@ -1295,12 +1316,12 @@ d.gs = function (dscr, get, set) {
 	return { get: get, set: set, configurable: c, enumerable: e };
 };
 
-},{"../String/prototype/contains":36,"./is-callable":28,"./valid-callable":34}],27:[function(require,module,exports){
+},{"../String/prototype/contains":37,"./is-callable":29,"./valid-callable":35}],28:[function(require,module,exports){
 'use strict';
 
 module.exports = require('./_iterate')('forEach');
 
-},{"./_iterate":25}],28:[function(require,module,exports){
+},{"./_iterate":26}],29:[function(require,module,exports){
 // Inspired by: http://www.davidflanagan.com/2009/08/typeof-isfuncti.html
 
 'use strict';
@@ -1331,7 +1352,7 @@ module.exports = function (obj) {
 	}
 };
 
-},{}],29:[function(require,module,exports){
+},{}],30:[function(require,module,exports){
 'use strict';
 
 var isFunction = require('../Function/is-function')
@@ -1347,7 +1368,7 @@ module.exports = function (x) {
 		((isObject(x) && !isFunction(x)) || (typeof x === "string"))) || false;
 };
 
-},{"../Function/is-function":21,"./is-object":30}],30:[function(require,module,exports){
+},{"../Function/is-function":22,"./is-object":31}],31:[function(require,module,exports){
 'use strict';
 
 var map = { function: true, object: true };
@@ -1356,7 +1377,7 @@ module.exports = function (x) {
 	return ((x != null) && map[typeof x]) || false;
 };
 
-},{}],31:[function(require,module,exports){
+},{}],32:[function(require,module,exports){
 'use strict';
 
 var getPrototypeOf = Object.getPrototypeOf
@@ -1371,7 +1392,7 @@ module.exports = function (value) {
 		false;
 };
 
-},{}],32:[function(require,module,exports){
+},{}],33:[function(require,module,exports){
 // Implementation credits go to:
 // http://wiki.ecmascript.org/doku.php?id=harmony:egal
 
@@ -1383,7 +1404,7 @@ module.exports = function (x, y) {
 		((x !== x) && (y !== y));
 };
 
-},{}],33:[function(require,module,exports){
+},{}],34:[function(require,module,exports){
 'use strict';
 
 var forEach = require('./for-each');
@@ -1396,7 +1417,7 @@ module.exports = function (obj, cb) {
 	return o;
 };
 
-},{"./for-each":27}],34:[function(require,module,exports){
+},{"./for-each":28}],35:[function(require,module,exports){
 'use strict';
 
 var isCallable = require('./is-callable');
@@ -1408,7 +1429,7 @@ module.exports = function (fn) {
 	return fn;
 };
 
-},{"./is-callable":28}],35:[function(require,module,exports){
+},{"./is-callable":29}],36:[function(require,module,exports){
 'use strict';
 
 module.exports = function (value) {
@@ -1418,7 +1439,7 @@ module.exports = function (value) {
 	return value;
 };
 
-},{}],36:[function(require,module,exports){
+},{}],37:[function(require,module,exports){
 'use strict';
 
 var indexOf = String.prototype.indexOf;
@@ -1427,12 +1448,12 @@ module.exports = function (searchString) {
 	return indexOf.call(this, searchString, arguments[1]) > -1;
 };
 
-},{}],37:[function(require,module,exports){
+},{}],38:[function(require,module,exports){
 'use strict';
 
 module.exports = new Function("return this")();
 
-},{}],38:[function(require,module,exports){
+},{}],39:[function(require,module,exports){
 'use strict';
 
 var freeze  = Object.freeze
@@ -1458,7 +1479,7 @@ all.future = future;
 all.futureStrict = futureStrict;
 freeze(all);
 
-},{}],39:[function(require,module,exports){
+},{}],40:[function(require,module,exports){
 
 // Fishbone.js
 //
@@ -1570,22 +1591,4 @@ function _(
 if (typeof module == "object") {
   module.exports = Model;
 }
-},{}],40:[function(require,module,exports){
-/**
- * Single point of entry bootstrap script
- */
-'use strict';
-
-var ComponentDomParser = require('componentdomparser');
-var parser = new ComponentDomParser({
-    dataSelector: 'area',
-    componentIndex: {
-        'Translations': require('./Components/Translations.js')
-    }
-});
-
-document.addEventListener('DOMContentLoaded', function () {
-    parser.parse();
-});
-
-},{"./Components/Translations.js":5,"componentdomparser":9}]},{},[40]);
+},{}]},{},[6]);

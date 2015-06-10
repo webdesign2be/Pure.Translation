@@ -78,7 +78,7 @@ class TranslationManagementController extends \TYPO3\Neos\Controller\Module\Abst
 		foreach ($commands as $locale => $translations) {
 			foreach ($translations as $translation) {
 				if($xliffFile = $this->xliffFileRepository->findMainByPackageKeyAndLocale(
-					$translation['packageKey'], $translation['locale'])) {
+					$translation['packageKey'], $locale)) {
 						$xliffFile->set($translation['identifier'], $translation['value']);
 						$this->xliffFileRepository->add($xliffFile);
 				}
