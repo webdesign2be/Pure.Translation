@@ -52,7 +52,10 @@ let EditableManager = Model({
    * @return {Object}
    */
   handleDocumentClick : function(e) {
-    this.freezeCurrent();
+    if ('input' !== e.target.tagName.toLowerCase()) {
+      this.freezeCurrent();
+    }
+    
     return this;
   },
 
