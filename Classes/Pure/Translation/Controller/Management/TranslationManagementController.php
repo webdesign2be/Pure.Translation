@@ -74,18 +74,23 @@ class TranslationManagementController extends \TYPO3\Neos\Controller\Module\Abst
 	 * @param array $commands
 	 * @return void
 	 */
-	public function saveAction($commands) {
-		foreach ($commands as $locale => $translations) {
-			foreach ($translations as $translation) {
-				if($xliffFile = $this->xliffFileRepository->findMainByPackageKeyAndLocale(
-					$translation['packageKey'], $locale)) {
-						$xliffFile->set($translation['identifier'], $translation['value']);
-						$this->xliffFileRepository->add($xliffFile);
+	public function saveAction($commands = array()) {
+		if (count($commands)) {
+			foreach ($commands as $locale => $translations) {
+				foreach ($translations as $translation) {
+					if($xliffFile = $this->xliffFileRepository->findMainByPackageKeyAndLocale(
+						$translation['packageKey'], $locale)) {
+							$xliffFile->set($translation['identifier'], $translation['value']);
+							$this->xliffFileRepository->add($xliffFile);
+					}
 				}
 			}
+
+			$this->xliffFileRepository->persistAll();
+			$this->redirect('index', NULL, NULL, array('locale' => $locale));
+			return;
 		}
 
-		$this->xliffFileRepository->persistAll();
-		$this->redirect('index', NULL, NULL, array('locale' => $locale));
+		$this->redirect('index', NULL, NULL);
 	}
 }

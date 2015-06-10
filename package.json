@@ -4,7 +4,7 @@
   "description": "Dynamic Translation Management for TYPO3 Neos Site Packages",
   "main": "Translation.js",
   "scripts": {
-    "build": "./node_modules/.bin/browserify -t babelify Resources/Private/JavaScripts/Main.js > Resources/Public/JavaScripts/Main.js",
+    "build": "./node_modules/.bin/browserify -t babelify Resources/Private/JavaScripts/Main.js | ./node_modules/.bin/uglifyjs > Resources/Public/JavaScripts/Main.js",
     "watch": "./node_modules/.bin/watchify -t babelify Resources/Private/JavaScripts/Main.js -o Resources/Public/JavaScripts/Main.js"
   },
   "repository": {
@@ -18,8 +18,9 @@
     "url": "https://github.com/grebaldi/Pure.Translation/issues"
   },
   "browser": {
-    "Templates/TranslationTable" : "./Resources/Private/JavaScripts/Templates/TranslationTable.js",
-    "Templates/MainApplication" : "./Resources/Private/JavaScripts/Templates/MainApplication.js"
+    "Templates/TranslationTable": "./Resources/Private/JavaScripts/Templates/TranslationTable.js",
+    "Templates/ScreenshotLightbox": "./Resources/Private/JavaScripts/Templates/ScreenshotLightbox.js",
+    "Templates/MainApplication": "./Resources/Private/JavaScripts/Templates/MainApplication.js"
   },
   "dependencies": {
     "componentdomparser": "0.1.0",
@@ -28,8 +29,9 @@
     "fishbone": "^1.0.1"
   },
   "devDependencies": {
+    "babelify": "^6.0.2",
     "browserify": "^10.1.0",
-    "watchify": "^3.2.1",
-    "babelify": "^6.0.2"
+    "uglify-js": "^2.4.23",
+    "watchify": "^3.2.1"
   }
 }

@@ -164,7 +164,37 @@
 	padding-right: 0!important;
 }
 
+.neos .translations .translations-table td .icon-screenshot {
+	margin-left: 20px;
+	font-size: 16px;
+	cursor: pointer;
+	color: rgba(255,255,255, 0.3);
+}
+
+.neos .translations .translations-table td:hover .icon-screenshot {
+	color: #fff;
+}
+
 .neos .translations button {
 	float: right;
 	margin-bottom: 20px;
+}
+
+.lightbox {
+	background-color: rgba(0,0,0,0.7);
+	position: fixed;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+	cursor: pointer;
+}
+
+.lightbox img {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	max-width: 90%;
+	max-height: 90%;
+	transform: translateY(-50%) translateX(-50%);
 }
