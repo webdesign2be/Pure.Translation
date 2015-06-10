@@ -28,6 +28,12 @@ class TranslationService {
   protected $packageManager;
 
   /**
+   * @Flow\Inject
+   * @var \TYPO3\Flow\Resource\ResourceManager
+   */
+  protected $resourceManager;
+
+  /**
    * @Flow\InjectConfiguration(package="TYPO3.TYPO3CR", path="contentDimensions.language.presets")
    * @var array
    */
@@ -44,6 +50,21 @@ class TranslationService {
    * @var array
    */
   protected $allTranslations = NULL;
+
+  /**
+   * @var array
+   */
+  protected $settings;
+
+  /**
+   * Inject the settings
+   *
+   * @param array $settings
+   * @return void
+   */
+  public function injectSettings(array $settings) {
+    $this->settings = $settings;
+  }
 
   /**
    * Get all avaible translations that can be found
@@ -100,6 +121,10 @@ class TranslationService {
                       'value' => $value
                     );
 
+                    if ($screenshotPath = $this->getScreenshotForTranslation($packageKey, $identifier)) {
+                      $translation['screenshotSrc'] = $screenshotPath;
+                    }
+
                     $translations['list'][++$listIterator] = $translation;
 
                     // Build Indexes
@@ -129,6 +154,30 @@ class TranslationService {
     }
 
     return $this->allTranslations;
+  }
+
+  /**
+   * Find a screenshot for a specific translation identifier and package, located under
+   * a per package configured screenshot path. Fallback gracefully, if no screenshot can
+   * be found.
+   *
+   * @return string
+   */
+  protected function getScreenshotForTranslation($packageKey, $identifier) {
+    if (isset($this->settings['screenshotPaths']) && isset($this->settings['screenshotPaths'][$packageKey])) {
+      $format = $this->settings['screenshotPaths'][$packageKey];
+      $screenshotResourcePath = sprintf($format, $identifier);
+
+
+      if (file_exists($screenshotResourcePath)) {
+        if (preg_match('#^resource://([^/]+)/Public/(.*)#', $screenshotResourcePath, $matches) === 1) {
+          $package = $matches[1];
+          $path = $matches[2];
+
+          return $this->resourceManager->getPublicPackageResourceUri($package, $path);
+        }
+      }
+    }
   }
 
   /**

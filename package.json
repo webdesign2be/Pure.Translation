@@ -19,6 +19,7 @@
   },
   "browser": {
     "Templates/TranslationTable" : "./Resources/Private/JavaScripts/Templates/TranslationTable.js",
+    "Templates/ScreenshotLightbox" : "./Resources/Private/JavaScripts/Templates/ScreenshotLightbox.js",
     "Templates/MainApplication" : "./Resources/Private/JavaScripts/Templates/MainApplication.js"
   },
   "dependencies": {

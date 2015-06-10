@@ -22,3 +22,15 @@ TYPO3:
               index:
                 label: 'Translations overview'
                 title: 'Shows a list of translated labels'
+Pure:
+  Translation:
+    #
+    # A map containing path formats per package, which specify where to find
+    # screenshots for each translation identifier, e.g.:
+    #
+    # 'Some.Package': 'resource://Some.Package/Some/Resource/Path/%s.png'
+    #
+    # wheras the placeholder will be replaced with the translation identifier
+    #
+    screenshotPaths:
+      '': ''

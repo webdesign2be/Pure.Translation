@@ -56,6 +56,23 @@ let TranslationTable = Model({
           this.editableManager.add(editable);
         }.bind(this),
 
+        screenshot : function(el, screenshotSrc) {
+          el.addEventListener('click', function() {
+            let lightbox = require('Templates/ScreenshotLightbox')({
+              src: screenshotSrc
+            });
+            let remove = function() {
+              lightbox.remove();
+              document.removeEventListener('click', remove);
+            };
+
+            document.body.appendChild(lightbox);
+            setTimeout(function() {
+              document.addEventListener('click', remove);
+            }, 0);
+          });
+        }.bind(this),
+
         localeSelector : function(select) {
           select.addEventListener('change', function() {
             this.trigger('locale:change', select.value);
@@ -64,6 +81,7 @@ let TranslationTable = Model({
       }
     }));
 
+    console.log(this.el);
     this.el.getElementsByTagName('select')[0].value = this.targetLocale;
 
     document.addEventListener('keyup', this.boundKeyHandler);
