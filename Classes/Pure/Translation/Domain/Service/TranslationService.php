@@ -4,6 +4,7 @@ namespace Pure\Translation\Domain\Service;
 
 use TYPO3\Flow\Annotations as Flow;
 use TYPO3\Neos\Exception as NeosException;
+use TYPO3\Flow\Utility\Files;
 
 /**
  * A simple service that helps retrieving site package translations
@@ -11,6 +12,8 @@ use TYPO3\Neos\Exception as NeosException;
  * @Flow\Scope("singleton")
  */
 class TranslationService {
+
+  const TRANSLATION_BASE_PATH = 'Private/Translations/';
 
   /**
    * @Flow\Inject
@@ -61,7 +64,6 @@ class TranslationService {
 
         $listIterator = 0;
         foreach ($packages as $packageKey => $package) {
-
           $localeIndex = 0;
           foreach ($this->languageDimensionPresets as $presetIdentifier => $preset) {
             if (!is_array($preset) || !is_array($preset['values'])) {
@@ -71,18 +73,20 @@ class TranslationService {
             $currentlyUsedLocaleCode = $preset['values'][0];
             $currentlyUsedLocale = new \TYPO3\Flow\I18n\Locale($currentlyUsedLocaleCode);
 
-            try {
-              $xliffSourceData = $this->xliffService->getCachedJson($currentlyUsedLocale, $sourceName, $package->getPackageKey());
-            } catch(\TYPO3\Flow\I18n\Exception\InvalidXmlFileException $e) {
+            $filePath = Files::concatenatePaths(array('resource://' . $packageKey,
+              self::TRANSLATION_BASE_PATH, $presetIdentifier, $sourceName . '.xlf'));
+
+            if (!file_exists($filePath)) {
               $translations = NULL;
               continue;
             }
 
-            // \TYPO3\Flow\var_dump();die;
-
-            $xliffData = json_decode(
-              $xliffSourceData,
-            true);
+            try {
+              $xliffData = $this->xliffService->parseXliffToArray($filePath, $packageKey, $sourceName);
+            } catch(\TYPO3\Flow\I18n\Exception\InvalidXmlFileException $e) {
+              $translations = NULL;
+              continue;
+            }
 
             foreach ($xliffData as $vendor) {
               foreach ($vendor as $product) {
