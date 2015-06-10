@@ -30,7 +30,7 @@ Pure:
     #
     # 'Some.Package': 'resource://Some.Package/Some/Resource/Path/%s.png'
     #
-    # wheras the placeholder will be replaced with the translation identifier
+    # whereas the placeholder will be replaced with the translation identifier
     #
     screenshotPaths:
       '': ''

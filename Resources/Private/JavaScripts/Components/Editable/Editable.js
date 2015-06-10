@@ -113,7 +113,7 @@ let Editable = Model({
       };
 
       this.setValue(value.to);
-
+      
       if (this.isDirty) {
         this.trigger('change', {
           editable : this,
@@ -148,7 +148,7 @@ let Editable = Model({
 
   /**
    * Destroy the object
-   * 
+   *
    * @return {Object}
    */
   destroy : function() {

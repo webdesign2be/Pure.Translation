@@ -81,7 +81,6 @@ let TranslationTable = Model({
       }
     }));
 
-    console.log(this.el);
     this.el.getElementsByTagName('select')[0].value = this.targetLocale;
 
     document.addEventListener('keyup', this.boundKeyHandler);
@@ -164,6 +163,7 @@ let TranslationTable = Model({
    * @return {Object}
    */
   save : function() {
+    this.editableManager.freezeCurrent();
     // normalize deltas for transport to server
     let command = this.commandHead;
     let data = {};
