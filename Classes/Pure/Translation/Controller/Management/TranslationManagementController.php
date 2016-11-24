@@ -51,12 +51,29 @@ class TranslationManagementController extends \TYPO3\Neos\Controller\Module\Abst
 		$translations = $this->translationService->retrieveAllGroupedByIdentifierAndHavingNumericLocale();
 		$locales = $this->translationService->getAllLocales();
 
+		$retrievedLocales = $this->translationService->retrieveAllGroupedByLocale();
+		$availableLocales = array();
+
+		foreach ($retrievedLocales as $key => $loc) {
+			foreach ($locales as $locIndex => $value) {
+				if ($value == $key) {
+					$availableLocales[] = $value;
+				}
+			}
+		}
+
+		if (count($locales) > count($availableLocales)) {
+			$this->view->assign('errorMoreTranslations', TRUE);
+		} else {
+			$this->view->assign('errorMoreTranslations', FALSE);
+		}
+
 		if (!empty($locales)) {
 			if (isset($allTranslations) && (!empty($allTranslations))) {
 				$this->view->assign('allTranslationsJSON', json_encode($allTranslations));
 				$this->view->assign('translations', $translations);
-				$this->view->assign('availableLocalesJSON', json_encode($locales));
-				$this->view->assign('availableLocales', $locales);
+				$this->view->assign('availableLocalesJSON', json_encode($availableLocales));
+				$this->view->assign('availableLocales', $availableLocales);
 				$this->view->assign('defaultLocale', $locale);
 				$this->view->assign('errorLocale', FALSE);
 				$this->view->assign('errorTransFiles', FALSE);

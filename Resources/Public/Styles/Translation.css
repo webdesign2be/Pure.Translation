@@ -198,3 +198,27 @@
 	max-height: 90%;
 	transform: translateY(-50%) translateX(-50%);
 }
+
+.neos .translation-notification {
+	position: relative;
+
+}
+.neos .translation-notification > .notification {
+	padding: 1em;
+	line-height: normal;
+	margin-bottom: 1em;
+	color: #fff;
+}
+
+.neos .translation-notification > .notification-error {
+	background-color: red;
+}
+
+.neos .translation-notification > .notification-warning {
+	background-color: orange;
+}
+
+.neos .translation-notification > .notification-success {
+	background-color: green;
+}
+

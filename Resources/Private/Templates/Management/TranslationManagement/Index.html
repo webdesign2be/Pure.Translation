@@ -12,38 +12,47 @@
 		</div>
 	</noscript>
 
-	<f:if condition="{errorLocale}">
-		<div class="neos-error">There are no language dimensions defined.</div>
-	</f:if>
+	<div class="translation-notification">
+		<f:if condition="{errorLocale}">
+			<div class="notification notification-error">There are no language dimensions defined.</div>
+		</f:if>
 
-	<f:if condition="{errorTransFiles}">
-		<f:then>
-			<div class="neos-error">There are no language xliff files in your sitepackages.</div>
-		</f:then>
-		<f:else>
-			<div class="translations" data-area="Translations" data-locale="{defaultLocale}">
-				<div style="display:none;" data-json="translations">{allTranslationsJSON -> f:format.raw()}</div>
-				<div style="display:none;" data-json="locales">{availableLocalesJSON -> f:format.raw()}</div>
-
-				<f:form action="save"></f:form>
-
-				<table class="neos-table" data-enhance="TranslationTable">
-					<thead>
-						<tr>
-							<th>{availableLocales.0 -> f:format.case(mode: 'upper')}</th>
-							<th>{availableLocales.1 -> f:format.case(mode: 'upper')}</th>
-						</tr>
-					</thead>
-					<tbody>
-						<f:for each="{translations}" as="translation">
-							<tr>
-								<td>{translation.0.value}</td>
-								<td>{translation.1.value}</td>
-							</tr>
-						</f:for>
-					</tbody>
-				</table>
+		<f:if condition="{errorMoreTranslations}">
+			<div class="notification notification-warning">
+				There are more dimensions configured as translation folder exist.<br />
+				To be able to translate labels for other languages, please setup folder for the rest of dimensions.
 			</div>
-		</f:else>
-	</f:if>
+		</f:if>
+
+		<f:if condition="{errorTransFiles}">
+			<f:then>
+				<div class="notification notification-error">There are no language xliff files in your sitepackages.</div>
+			</f:then>
+			<f:else>
+				<div class="translations" data-area="Translations" data-locale="{defaultLocale}">
+					<div style="display:none;" data-json="translations">{allTranslationsJSON -> f:format.raw()}</div>
+					<div style="display:none;" data-json="locales">{availableLocalesJSON -> f:format.raw()}</div>
+
+					<f:form action="save"></f:form>
+
+					<table class="neos-table" data-enhance="TranslationTable">
+						<thead>
+							<tr>
+								<th>{availableLocales.0 -> f:format.case(mode: 'upper')}</th>
+								<th>{availableLocales.1 -> f:format.case(mode: 'upper')}</th>
+							</tr>
+						</thead>
+						<tbody>
+							<f:for each="{translations}" as="translation">
+								<tr>
+									<td>{translation.0.value}</td>
+									<td>{translation.1.value}</td>
+								</tr>
+							</f:for>
+						</tbody>
+					</table>
+				</div>
+			</f:else>
+		</f:if>
+	</div>
 </f:section>

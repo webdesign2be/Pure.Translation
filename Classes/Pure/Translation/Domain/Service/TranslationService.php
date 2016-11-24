@@ -95,10 +95,9 @@ class TranslationService {
             $currentlyUsedLocale = new \TYPO3\Flow\I18n\Locale($currentlyUsedLocaleCode);
 
             $filePath = Files::concatenatePaths(array('resource://' . $packageKey,
-              self::TRANSLATION_BASE_PATH, $presetIdentifier, $sourceName . '.xlf'));
+              self::TRANSLATION_BASE_PATH, $preset['uriSegment'], $sourceName . '.xlf'));
 
             if (!file_exists($filePath)) {
-              $translations = NULL;
               continue;
             }
 
@@ -110,35 +109,34 @@ class TranslationService {
             }
 
             foreach ($xliffData as $vendor) {
-              foreach ($vendor as $product) {
-                foreach ($product as $sourceName => $translationUnit) {
-                  foreach ($translationUnit as $identifier => $value) {
-                    $translation = array(
-                      'packageKey' => $packageKey,
-                      'locale' => $currentlyUsedLocaleCode,
-                      'sourceName' => $sourceName,
-                      'identifier' => $identifier,
-                      'value' => $value
-                    );
+              foreach ($vendor as $sourceName => $translationUnit) {
+                foreach ($translationUnit as $identifier => $value) {
+                  $translation = array(
+                    'packageKey' => $packageKey,
+                    'locale' => $currentlyUsedLocaleCode,
+                    'sourceName' => $sourceName,
+                    'identifier' => $identifier,
+                    'value' => $value
+                  );
 
-                    if ($screenshotPath = $this->getScreenshotForTranslation($packageKey, $identifier)) {
-                      $translation['screenshotSrc'] = $screenshotPath;
-                    }
-
-                    $translations['list'][++$listIterator] = $translation;
-
-                    // Build Indexes
-                    $translations['Package:Locale:Identifier'][$packageKey][$currentlyUsedLocaleCode][$identifier] =
-                    $translations['Package:Identifier:Locale'][$packageKey][$identifier][$currentlyUsedLocaleCode] =
-                    $translations['Locale:Package:Identifier'][$currentlyUsedLocaleCode][$packageKey][$identifier] =
-                    $translations['Locale:Identifier:Package'][$currentlyUsedLocaleCode][$identifier][$packageKey] =
-                    $translations['Identifier:Package:Locale'][$identifier][$packageKey][$currentlyUsedLocaleCode] =
-                    $translations['Identifier:Locale:Package'][$identifier][$currentlyUsedLocaleCode][$packageKey] =
-                    $translations['Locale:Identifier'][$currentlyUsedLocaleCode][$identifier] =
-                    $translations['Identifier:Locale'][$identifier][$currentlyUsedLocaleCode] =
-                    $translations['Identifier:LocaleNumeric'][$identifier][$localeIndex] =
-                      &$translations['list'][$listIterator];
+                  if ($screenshotPath = $this->getScreenshotForTranslation($packageKey, $identifier)) {
+                    $translation['screenshotSrc'] = $screenshotPath;
                   }
+
+                  $translations['list'][++$listIterator] = $translation;
+
+                  // Build Indexes
+                  $translations['Package:Locale:Identifier'][$packageKey][$currentlyUsedLocaleCode][$identifier] =
+                  $translations['Package:Identifier:Locale'][$packageKey][$identifier][$currentlyUsedLocaleCode] =
+                  $translations['Locale:Package:Identifier'][$currentlyUsedLocaleCode][$packageKey][$identifier] =
+                  $translations['Locale:Identifier:Package'][$currentlyUsedLocaleCode][$identifier][$packageKey] =
+                  $translations['Identifier:Package:Locale'][$identifier][$packageKey][$currentlyUsedLocaleCode] =
+                  $translations['Identifier:Locale:Package'][$identifier][$currentlyUsedLocaleCode][$packageKey] =
+                  $translations['Locale:Identifier'][$currentlyUsedLocaleCode][$identifier] =
+                  $translations['Identifier:Locale'][$identifier][$currentlyUsedLocaleCode] =
+                  $translations['Identifier:LocaleNumeric'][$identifier][$localeIndex] =
+                    &$translations['list'][$listIterator];
+
                 }
               }
             } // XLIFF Iteration
